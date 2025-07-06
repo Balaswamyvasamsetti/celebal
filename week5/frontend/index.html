@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User CRUD Operations</title>
+    <style>
+        body { font-family: Arial; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .form-group { margin: 10px 0; }
+        input { padding: 10px; margin: 5px; border: 1px solid #ccc; border-radius: 4px; width: 200px; }
+        button { padding: 10px 15px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .delete-btn { background: #dc3545; }
+        .delete-btn:hover { background: #c82333; }
+        .update-btn { background: #28a745; }
+        .update-btn:hover { background: #218838; }
+        #users { margin-top: 20px; }
+        .user { border: 1px solid #ccc; padding: 15px; margin: 10px 0; border-radius: 5px; background: #f9f9f9; }
+        h2 { color: #333; border-bottom: 2px solid #007bff; padding-bottom: 5px; }
+        .message { padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>User Management System</h1>
+        
+        <div class="section">
+            <h2>Create New User</h2>
+            <div class="form-group">
+                <input type="text" id="createName" placeholder="Enter Name">
+                <input type="email" id="createEmail" placeholder="Enter Email">
+                <input type="number" id="createAge" placeholder="Enter Age">
+                <button onclick="createUser()">Create User</button>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Update User</h2>
+            <div class="form-group">
+                <input type="text" id="updateId" placeholder="User ID to Update">
+                <input type="text" id="updateName" placeholder="New Name">
+                <input type="email" id="updateEmail" placeholder="New Email">
+                <input type="number" id="updateAge" placeholder="New Age">
+                <button class="update-btn" onclick="updateUser()">Update User</button>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Delete User</h2>
+            <div class="form-group">
+                <input type="text" id="deleteId" placeholder="User ID to Delete">
+                <button class="delete-btn" onclick="deleteUser()">Delete User</button>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>View Users</h2>
+            <button onclick="getAllUsers()">Show All Users</button>
+            <div class="form-group">
+                <input type="text" id="searchId" placeholder="Search by User ID">
+                <button onclick="getUser()">Search User</button>
+            </div>
+        </div>
+        
+        <div id="message"></div>
+        <div id="users"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000';
+
+        function showMessage(text, isSuccess = true) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.innerHTML = `<div class="message ${isSuccess ? 'success' : 'error'}">${text}</div>`;
+            setTimeout(() => messageDiv.innerHTML = '', 3000);
+        }
+
+        async function createUser() {
+            const name = document.getElementById('createName').value;
+            const email = document.getElementById('createEmail').value;
+            const age = document.getElementById('createAge').value;
+            
+            if (!name || !email || !age) {
+                showMessage('Please fill all fields', false);
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_URL}/users`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, age: parseInt(age) })
+                });
+                
+                const result = await response.json();
+                if (response.ok) {
+                    showMessage('User created successfully!');
+                    document.getElementById('createName').value = '';
+                    document.getElementById('createEmail').value = '';
+                    document.getElementById('createAge').value = '';
+                    getAllUsers();
+                } else {
+                    showMessage(result.error, false);
+                }
+            } catch (error) {
+                showMessage('Error creating user', false);
+            }
+        }
+
+        async function getAllUsers() {
+            try {
+                const response = await fetch(`${API_URL}/users`);
+                const users = await response.json();
+                
+                document.getElementById('users').innerHTML = `
+                    <h2>All Users (${users.length})</h2>
+                    ${users.map(user => `
+                        <div class="user">
+                            <strong>ID:</strong> ${user._id}<br>
+                            <strong>Name:</strong> ${user.name || user.username}<br>
+                            <strong>Email:</strong> ${user.email}<br>
+                            <strong>Age:</strong> ${user.age || 'N/A'}
+                        </div>
+                    `).join('')}
+                `;
+            } catch (error) {
+                showMessage('Error fetching users', false);
+            }
+        }
+
+        async function getUser() {
+            const id = document.getElementById('searchId').value;
+            if (!id) {
+                showMessage('Please enter User ID', false);
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_URL}/users/${id}`);
+                const result = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('users').innerHTML = `
+                        <h2>Search Result</h2>
+                        <div class="user">
+                            <strong>ID:</strong> ${result._id}<br>
+                            <strong>Name:</strong> ${result.name || result.username}<br>
+                            <strong>Email:</strong> ${result.email}<br>
+                            <strong>Age:</strong> ${result.age || 'N/A'}
+                        </div>
+                    `;
+                } else {
+                    showMessage(result.error, false);
+                }
+            } catch (error) {
+                showMessage('Error searching user', false);
+            }
+        }
+
+        async function updateUser() {
+            const id = document.getElementById('updateId').value;
+            const name = document.getElementById('updateName').value;
+            const email = document.getElementById('updateEmail').value;
+            const age = document.getElementById('updateAge').value;
+            
+            if (!id) {
+                showMessage('Please enter User ID to update', false);
+                return;
+            }
+            
+            const updateData = {};
+            if (name) updateData.name = name;
+            if (email) updateData.email = email;
+            if (age) updateData.age = parseInt(age);
+            
+            try {
+                const response = await fetch(`${API_URL}/users/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updateData)
+                });
+                
+                const result = await response.json();
+                if (response.ok) {
+                    showMessage('User updated successfully!');
+                    document.getElementById('updateId').value = '';
+                    document.getElementById('updateName').value = '';
+                    document.getElementById('updateEmail').value = '';
+                    document.getElementById('updateAge').value = '';
+                    getAllUsers();
+                } else {
+                    showMessage(result.error, false);
+                }
+            } catch (error) {
+                showMessage('Error updating user', false);
+            }
+        }
+
+        async function deleteUser() {
+            const id = document.getElementById('deleteId').value;
+            if (!id) {
+                showMessage('Please enter User ID to delete', false);
+                return;
+            }
+            
+            if (!confirm('Are you sure you want to delete this user?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_URL}/users/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                if (response.ok) {
+                    showMessage('User deleted successfully!');
+                    document.getElementById('deleteId').value = '';
+                    getAllUsers();
+                } else {
+                    showMessage(result.error, false);
+                }
+            } catch (error) {
+                showMessage('Error deleting user', false);
+            }
+        }
+
+        // Load all users on page load
+        getAllUsers();
+    </script>
+</body>
+</html>
