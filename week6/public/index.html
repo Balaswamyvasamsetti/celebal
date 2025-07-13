@@ -3,23 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User CRUD App</title>
+    <title>Multi-Resource CRUD App</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>User Management</h1>
+        <h1>Resource Management</h1>
         
-        <form id="userForm">
-            <input type="hidden" id="userId">
-            <input type="text" id="name" placeholder="Name" required>
-            <input type="email" id="email" placeholder="Email" required>
-            <input type="number" id="age" placeholder="Age" required>
-            <button type="submit" id="submitBtn">Add User</button>
-            <button type="button" id="cancelBtn" style="display:none">Cancel</button>
-        </form>
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('users')">Users</button>
+            <button class="tab-btn" onclick="showTab('products')">Products</button>
+            <button class="tab-btn" onclick="showTab('orders')">Orders</button>
+        </div>
 
-        <div id="usersList"></div>
+        <!-- Users Tab -->
+        <div id="users" class="tab-content active">
+            <form id="userForm">
+                <input type="hidden" id="userId">
+                <input type="text" id="userName" placeholder="Name" required>
+                <input type="email" id="userEmail" placeholder="Email" required>
+                <input type="number" id="userAge" placeholder="Age" required>
+                <button type="submit" id="userSubmitBtn">Add User</button>
+                <button type="button" id="userCancelBtn" style="display:none">Cancel</button>
+            </form>
+            <div id="usersList"></div>
+        </div>
+
+        <!-- Products Tab -->
+        <div id="products" class="tab-content">
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                <input type="text" id="productName" placeholder="Product Name" required>
+                <input type="number" id="productPrice" placeholder="Price" required>
+                <input type="text" id="productCategory" placeholder="Category" required>
+                <input type="number" id="productStock" placeholder="Stock" required>
+                <button type="submit" id="productSubmitBtn">Add Product</button>
+                <button type="button" id="productCancelBtn" style="display:none">Cancel</button>
+            </form>
+            <div id="productsList"></div>
+        </div>
+
+        <!-- Orders Tab -->
+        <div id="orders" class="tab-content">
+            <form id="orderForm">
+                <input type="hidden" id="orderId">
+                <input type="text" id="orderUserId" placeholder="User ID" required>
+                <input type="text" id="orderItems" placeholder="Items (comma separated)" required>
+                <input type="number" id="orderTotal" placeholder="Total" required>
+                <input type="text" id="orderStatus" placeholder="Status" required>
+                <button type="submit" id="orderSubmitBtn">Add Order</button>
+                <button type="button" id="orderCancelBtn" style="display:none">Cancel</button>
+            </form>
+            <div id="ordersList"></div>
+        </div>
     </div>
 
     <script src="script.js"></script>

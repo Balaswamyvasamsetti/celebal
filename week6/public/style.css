@@ -2,9 +2,19 @@
 
 body { font-family: Arial, sans-serif; background: #f4f4f4; }
 
-.container { max-width: 800px; margin: 20px auto; padding: 20px; background: white; border-radius: 8px; }
+.container { max-width: 1000px; margin: 20px auto; padding: 20px; background: white; border-radius: 8px; }
 
 h1 { text-align: center; margin-bottom: 30px; color: #333; }
+
+.tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+
+.tab-btn { padding: 10px 20px; border: none; background: none; cursor: pointer; border-bottom: 2px solid transparent; }
+
+.tab-btn.active { border-bottom-color: #007bff; color: #007bff; }
+
+.tab-content { display: none; }
+
+.tab-content.active { display: block; }
 
 form { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
 
@@ -12,14 +22,14 @@ input { padding: 10px; border: 1px solid #ddd; border-radius: 4px; flex: 1; min-
 
 button { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
 
-#submitBtn { background: #007bff; color: white; }
-#cancelBtn { background: #6c757d; color: white; }
+button[type="submit"] { background: #007bff; color: white; }
+button[type="button"] { background: #6c757d; color: white; }
 
-.user-card { border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; }
+.item-card { border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; }
 
-.user-info { flex: 1; }
+.item-info { flex: 1; }
 
-.user-actions button { margin-left: 5px; padding: 5px 10px; border: none; border-radius: 3px; cursor: pointer; }
+.item-actions button { margin-left: 5px; padding: 5px 10px; border: none; border-radius: 3px; cursor: pointer; }
 
 .edit-btn { background: #28a745; color: white; }
 .delete-btn { background: #dc3545; color: white; }
