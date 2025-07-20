@@ -1,0 +1,14 @@
+{
+  "name": "jwt-auth-demo",
+  "version": "1.0.0",
+  "description": "JWT Authentication Demo with React, Vite, Express, and MongoDB",
+  "scripts": {
+    "start": "start.bat",
+    "backend": "cd backend && npm run dev",
+    "frontend": "cd frontend && npm run dev",
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
