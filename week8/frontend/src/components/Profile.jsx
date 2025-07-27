@@ -27,28 +27,7 @@ const Profile = ({ user, token }) => {
 
   const onSubmit = async e => {
     e.preventDefault();
-    setError('');
-    setMessage('');
-    setLoading(true);
-
-    try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      };
-
-      const res = await axios.put('/api/auth/updatedetails', formData, config);
-      
-      if (res.data.success) {
-        setMessage('Profile updated successfully');
-      }
-    } catch (err) {
-      setError(err.response?.data?.error || 'Error updating profile');
-    } finally {
-      setLoading(false);
-    }
+    setError('Profile update feature is not implemented yet');
   };
 
   return (

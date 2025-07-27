@@ -23,12 +23,12 @@ const FileUpload = ({ token }) => {
     }
 
     const formData = new FormData();
-    formData.append('image', file);
+    formData.append('file', file);
 
     setLoading(true);
 
     try {
-      const res = await axios.post('/api/upload/profile', formData, {
+      const res = await axios.post('/api/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`
@@ -36,13 +36,13 @@ const FileUpload = ({ token }) => {
       });
 
       setUploadedFile({
-        fileName: res.data.data.file,
-        filePath: `/uploads/${res.data.data.file}`
+        fileName: res.data.file.filename,
+        filePath: res.data.file.path
       });
 
-      setMessage('File uploaded successfully');
+      setMessage(res.data.message);
     } catch (err) {
-      setError(err.response?.data?.error || 'Error uploading file');
+      setError(err.response?.data?.message || 'Error uploading file');
     } finally {
       setLoading(false);
     }

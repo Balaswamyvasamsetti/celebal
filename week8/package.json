@@ -4,6 +4,7 @@
   "description": "Week 8 Project",
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "cd backend && npm run dev",
     "client": "cd frontend && npm run dev",
     "install-all": "npm i && cd backend && npm i && cd ../frontend && npm i"

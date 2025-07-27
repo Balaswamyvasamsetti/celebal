@@ -25,12 +25,12 @@ const Login = ({ login }) => {
     try {
       const res = await axios.post('/api/auth/login', formData);
       
-      if (res.data.success) {
+      if (res.data.token) {
         login(res.data.token);
         navigate('/profile');
       }
     } catch (err) {
-      setError(err.response?.data?.error || 'Login failed');
+      setError(err.response?.data?.message || 'Login failed');
     } finally {
       setLoading(false);
     }
